@@ -1,0 +1,427 @@
+<html>
+<head>
+	<link rel="stylesheet" href="css/style002.css" />
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Pathway+Gothic+One' rel='stylesheet' type='text/css'>
+	<script type='text/javascript' src='http://code.jquery.com/jquery-1.7.1.js'></script>
+	<script src="http://jqueryrotate.googlecode.com/svn/trunk/jQueryRotate.js"></script>
+	<script language='javascript' >
+		
+		var linksLayer, aboutLayer, dynamicContentLayer;
+		var language;
+		function pageOnLoad()
+		{
+			linksLayer = createLinksLayer();
+			aboutLayer = createAboutLayer();
+			
+			setLanguage('es');
+			// set some effects
+			$("#downloadcv").rotate({ 
+			   bind: 
+				 { 
+					mouseover : function() { $(this).rotate({animateTo:200,duration:200}) },
+					mouseout : function() { $(this).rotate({animateTo:0,duration:200}) }
+				 }
+			});
+			// set the initial view
+			layerIn(linksLayer);
+		}
+		
+		function layerIn(layer)
+		{
+			// get the active layer
+			var menu = document.getElementById('menu');
+			var activeLayer = document.getElementById(menu.getAttribute('activeLayer'));
+			if (layer == activeLayer)
+				shakeLayer(layer);
+			else
+			{
+				if (activeLayer != null)
+					layerOut(activeLayer);
+				var xposition = layer.getAttribute('xposition');
+				var id = layer.getAttribute('id');
+				$('#' + id).animate({left:xposition});
+				menu.setAttribute('activeLayer', id);
+			}
+		}
+		
+		function layerOut(layer)
+		{
+			var id = layer.getAttribute('id');
+			var width = layer.style.width;
+			$('#' + id).animate({left:-(parseInt(width) + 100)});
+		}
+		
+		function shakeLayer(layer)
+		{
+			var id = layer.getAttribute('id');
+			var xposition = parseInt(layer.getAttribute('xposition'));
+			$('#' + id).animate({left: (xposition - 10)}, {duration: 20}).animate({left: (xposition + 10)}, {duration: 20}).animate({left: xposition}, {duration: 20});
+		}
+		
+		function createAboutLayer()
+		{
+			var content = document.getElementById('about');
+			var layer = createShadowedDiv(content, "600px", "-800px");
+			layer.setAttribute('id', 'aboutLayer');
+			layer.setAttribute('xposition', '140px');
+			content.style.visibility = 'visible';
+			document.body.appendChild(layer);
+			return layer;
+		}
+		
+		function createLinksLayer()
+		{
+			var layer = document.createElement('div');
+			var contentLeft = document.getElementById('init');
+			var contentRight = document.getElementById('dynamicContent');
+			var layerLeft = createShadowedDiv(contentLeft, "160px", "0px");
+			var layerRight = createShadowedDiv(contentRight, "450px", "170px");
+			
+			layer.setAttribute('id', 'linksLayer');
+			layer.setAttribute('xposition', '140px');
+			layer.style.position = 'absolute';
+			layer.style.top = 0;
+			layer.style.left = -700;
+			layer.style.width = 600;
+			contentLeft.style.visibility = 'visible';
+			contentRight.style.visibility = 'visible';
+			layer.appendChild(layerLeft);
+			layer.appendChild(layerRight);
+			document.body.appendChild(layer);
+			return layer;
+		}
+		
+		function createDynamicLayer()
+		{
+			var content = document.getElementById('dynamicContent');
+			var layer = createShadowedDiv(content, "200px", "-400px");
+			layer.setAttribute('id', 'dynamicContentLayer');
+			layer.setAttribute('xposition', '400px');
+			content.style.visibility = 'visible';
+			document.body.appendChild(layer);
+			return layer;
+		}
+		
+		function createShadowedDiv(content, width, left)
+		{
+			if (content == null) content = document.createElement('div');
+			if (width == null) width = '620px';
+			if (left == null) left = '50px';
+			
+			var div = document.createElement('div');
+			var top = '80px';
+			var height = '530px';
+			// create the styles
+			var mainDivStyle = 'left:' + left + ';top:' + top + ';width:' + width + ';height:' + height + ';display:block;position:absolute;margin:0px;';
+			var shadowDivStyle = 'position:absolute;margin:0px;width:100%;height:100%;';
+			var roundCornersStyle = 'behavior: url(http://stgo.ppamo.cl/uploads/newweb/css/border-radius.htc);border-radius: 10px;-moz-border-radius: 10px;-webkit-border-radius: 10px;-khtml-border-radius: 10px;';
+			var opacityStyle = 'background-color: #000;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=35)";filter: alpha(opacity=35);opacity: 0.35;';
+			var bottomShadowStyle = 'position:absolute;height:80px;width:100%;top:500px;margin:0px;';
+			// create the elements
+			div.innerHTML = '<div style=\'' + mainDivStyle + '\'></div>';
+			var mainDiv = div.firstChild;
+			div.innerHTML = '<div style=\'' + shadowDivStyle + roundCornersStyle + opacityStyle + '\'></div>';
+			var shadowDiv = div.firstChild;
+			div.innerHTML = '<div style=\'' + bottomShadowStyle + '\'><img style=\'height:100px;width:100%;\' src=\'img/shadow.png\' /></div>';
+			var bottomShadowDiv = div.firstChild;
+			// store the elements
+			mainDiv.appendChild(bottomShadowDiv);
+			mainDiv.appendChild(shadowDiv);
+			mainDiv.appendChild(content);
+			return mainDiv;
+		}
+		
+		function setLanguage(lang)
+		{
+			language = lang;
+			if (document.getElementById('menu') != null)
+			{
+				var nodes = document.getElementById('menu').getElementsByTagName('td');
+				for (var i = 0; i < nodes.length; i++)
+				{
+					if (nodes[i].getAttribute(lang) != null)
+						nodes[i].innerHTML = '<h1 class="menu">' + nodes[i].getAttribute(lang) + '</h1>'
+				}
+			}
+			if (document.getElementById('init'))
+			{
+				var nodes = document.getElementById('init').getElementsByTagName('span');
+				for (var i = 0; i < nodes.length; i++)
+				{
+					if (nodes[i].getAttribute(lang) != null)
+						nodes[i].innerHTML = nodes[i].getAttribute(lang);
+				}	
+			}
+			if (document.getElementById('about') != null)
+			{
+				var nodes = document.getElementById('about').getElementsByTagName('span');
+				for (var i = 0; i < nodes.length; i++)
+				{
+					if (nodes[i].getAttribute(lang) != null)
+						nodes[i].innerHTML = nodes[i].getAttribute(lang);
+				}
+			}
+		}
+		
+		function changeMenuOpacity(src)
+		{
+			src.className = 'onMenuOver';
+		}
+		
+		function restoreMenuOpacity(src)
+		{
+			src.className = '';
+		}
+		
+		function navigateto(src)
+		{
+			var name = src.getAttribute('name');
+			var url = null;
+			var specs = null;
+			switch(name)
+			{
+				case 'avatar':
+					break;
+				case 'about':
+					layerIn(aboutLayer);
+					break;
+				case 'links':
+					layerIn(linksLayer);
+					break;
+				case 'projects':
+					break;
+				case 'language':
+					var currentLanguage = src.getAttribute('currentLanguage');
+					if (currentLanguage == 'es')
+						currentLanguage = 'en';
+					else
+						currentLanguage = 'es';
+					src.setAttribute('currentLanguage', currentLanguage);
+					setLanguage(currentLanguage);
+					break;
+			}
+		}
+		function goto(src)
+		{
+			var name = src.getAttribute('name');
+			var url = null;
+			var specs = null;
+			switch(name)
+			{
+				case 'gmail.ppamo':
+					url = 'http://gmail.ppamo.cl';
+					specs = '_self';
+					break;
+				case 'cloud.ppamo':
+					url = 'http://cloud.ppamo.cl';
+					specs = '_self';
+					break;
+				case 'blog.ppamo':
+					url = 'http://blog.ppamo.cl/' + language;
+					specs = '_self';
+					break;
+				case 'aboutme.ppamo':
+					url = 'http://about.me/ppamo';
+					break;
+				case 'linkedin.ppamo':
+					url = 'http://www.linkedin.com/pub/pablo-mansilla/b/11/784/' + language;
+					break;
+				case 'twitter.ppamo':
+					url = 'http://twitter.com/ppamo';
+					break;
+				case 'gplus.ppamo':
+					url = 'http://plus.google.com/101794950547229957220';
+					break;
+				case 'youtube.ppamo':
+					url = 'http://www.youtube.com/channel/UCpDHweH7Ph6dGIOI6nDO19Q';
+					break;
+				case 'downloadcv':
+					url = 'res/Pablo_Mansilla_Ojeda.' + language + '.pdf';
+					break;
+			}
+			if (url != null)
+				window.open(url, specs);
+		}
+	</script>
+	<style>
+		#init
+		{
+			display: block;
+			position: absolute;
+			width: 250px;
+			z-index: 5;
+			display: none;
+			left: 10px;
+			top: 30px;
+			margin: 0px 0px 0px 0px;
+			height: 400px;
+		}
+		#init td
+		{
+			font: normal 12px/120% 'Lato', sans-serif;
+			padding-bottom: 7px;
+			padding-left: 15px;
+			width: 100%;
+			cursor: default;
+		}
+		#menu
+		{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			margin: 0px;
+			width: 100%;
+			
+			background-color: black;
+			opacity: 0.8;
+			-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+			filter: alpha(opacity=80);
+		}
+		#menu table
+		{
+			border-collapse: collapse;
+		}
+		#menu td
+		{
+			vertical-align: middle;
+		}
+		#menu td h1, #menu td h3
+		{
+			padding-right: 10px;
+			padding-left: 10px;
+			color: white;
+			font-style: none;
+			cursor: default;
+		}
+		#menu td .menu
+		{
+			cursor: hand;
+		}
+		#menu .onMenuOver
+		{
+			opacity: 0.6;
+			-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+			filter: alpha(opacity=60);
+		}
+		.logo
+		{
+			width: 100px;
+			padding-right: 30px;
+		}
+		#me
+		{
+			width: 100px;
+		}
+		.button
+		{
+			cursor: hand;
+		}
+	</style>
+</head>
+<body onLoad='pageOnLoad();' >
+
+		<div id="about" class="about" style="display: block;visibility: hidden;">
+			<table id='mainAboutTable'>
+				<tr>
+					<td>
+						<table id='leftAboutTable'>
+							<tr>
+								<td><img src="img/portrait.003.jpg"  id="me" alt=""></td>
+							</tr>						
+						</table>
+					</td>
+					<td>
+						<table id='rightAboutTable'>
+							<tr>
+								<td>
+									<div>
+										<h2>Pablo Mansilla</h2>
+										<p><span es='Me apasiona el dise&ntilde;o e implementaci&oacute;n de proyectos tecnol&oacute;gicos, especialmente en Internet, intentando generar productos y servicios innovadores, &uacute;tiles y amigables' en='I enjoy the design and implementation of technological projects, especially on Internet, always looking for generate products and services innovative and especially userfriendly and useful'></span><p>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<table id='details'>
+										<tr>
+											<td><img class='icon' src='img/icons/buildings.png' /></td>
+											<td><span es='Ingeniero de Software' en='Software Engineer'></span></td>
+										</tr>
+										<tr>
+											<td><img class='icon' src='img/icons/education.png' /></td>
+											<td><span es='Magister en Innovaci&oacute;n Tecnol&oacute;gica y Emprendimiento de la Universidad T&eacute;cnica Federico Santa Mar&iacute;a' en='Master in Technological Innovation and Entrepreneurship at Universidad T&eacute;cnica Federico Santa Mar&iacute;a'></span></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td><span es='Diploma de Post&iacute;tulo de la Universidad de Chile, Creaci&oacute;n Fotogr&aacute;fica Experimental' en='Diploma in Experimental Photographic Creation in the Art School at the Universidad de Chile'></span></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td><span es="T&iacute;tulo de Ingeniero en Computaci&oacute;n y Licenciado en las Ciencias de la Computaci&oacute;n, Universidad Austral de Chile" en="Bachelor's degree in Computer Science at Universidad Austral de Chile"></span></td>
+										</tr>
+										<tr>
+											<td><img class='icon' src='img/icons/location.png' /></td>
+											<td><span>Santiago Centro, Santiago, Chile</span></td>
+										</tr>
+										<tr>
+											<td><img class='icon' src='img/icons/mail.png' /></td>
+											<td><span>pablo@ppamo.cl</span></td>
+										</tr>
+										<tr>
+											<td><img class='icon' src='img/icons/movil.png' /></td>
+											<td><span>+569-82150949</span></td>
+										</tr>
+										<tr>
+											<td colspan='2'>
+												<img class='iconlarge button' name='linkedin.ppamo' onclick='goto(this);' src='img/icons/linkedin.png' />
+												<img class='iconlarge button' name='gplus.ppamo' onclick='goto(this);' src='img/icons/gplus.png' />
+												<span es='revisa mi cv' en='check my cv '></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img id='downloadcv' class='iconlarge button' name='downloadcv' src='img/icons/document.png' onclick='goto(this);' />
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+	<div id='init' style="display: block;visibility: hidden;">
+		<table id='mainInitTable'>
+			<tr><td>&nbsp;</td></tr>
+			<tr><td><h2>Apps</h2></td></tr>
+			<tr><td><h3 class='link' name='gmail.ppamo' onclick='goto(this);'><img src="img/icons/email.png" class='icon'>&nbsp;&nbsp; <span es='Correo' en='Mail'></span><h3></td></tr>
+			<tr><td><h3 class='link' name='cloud.ppamo' onclick='goto(this);'><img src="img/icons/cloud.png" class='icon'>&nbsp;&nbsp; <span es='Nube' en='Cloud'></span><h3></td></tr>
+			<tr><td><h3 class='link' name='blog.ppamo' onclick='goto(this);'><img src="img/icons/wordpress.png" class='icon'>&nbsp;&nbsp; <span>Blog</span><h3></td></tr>
+			<tr><td>&nbsp;</td></tr>
+			<tr><td>&nbsp;</td></tr>
+			<tr><td><h2>Links</h2></td></tr>
+			<tr><td><h3 class='link' name='linkedin.ppamo' onclick='goto(this);'><img src="img/icons/linkedin.png" class='icon'>&nbsp;&nbsp; <span>Linkedin</span><h3></td></tr>
+			<tr><td><h3 class='link' name='gplus.ppamo' onclick='goto(this);'><img src="img/icons/gplus.png" class='icon'>&nbsp;&nbsp; <span>Google Plus</span><h3></td></tr>
+			<tr><td><h3 class='link' name='youtube.ppamo' onclick='goto(this);'><img src="img/icons/youtube.png" class='icon'>&nbsp;&nbsp; <span>Youtube</span><h3></h3></td></tr>
+			<tr><td><h3 class='link' name='twitter.ppamo' onclick='goto(this);'><img src="img/icons/twitter.png" class='icon'>&nbsp;&nbsp; <span>Twitter</span><h3></td></tr>
+			<tr><td><h3 class='link' name='aboutme.ppamo' onclick='goto(this);'><img src="img/icons/aboutme.png" class='icon'>&nbsp;&nbsp; <span>About.me</span><h3></h3></td></tr>
+		</table>
+	</div>
+	
+	<div id='dynamicContent' style="display: block;visibility: hidden;"></div>
+	
+	<div id='menu'>
+		<table>
+			<tr>
+				<td name='avatar' onclick='navigateto(this);' onmouseover='changeMenuOpacity(this);' onmouseout='restoreMenuOpacity(this);'><img src='img/avatar.jpg' class='logo' /></td>
+				<td name='about' onclick='navigateto(this);' es='Sobre mi' en='About' onmouseover='changeMenuOpacity(this);' onmouseout='restoreMenuOpacity(this);'></td>
+				<td><h1> / </h1></td>
+				<td name='links' onclick='navigateto(this);' onmouseover='changeMenuOpacity(this);' onmouseout='restoreMenuOpacity(this);'><h1>links &amp; apps</h1></td>
+				<td><h1> / </h1></td>
+				<td name='projects' onclick='navigateto(this);' es='Proyectos' en='Projects' onmouseover='changeMenuOpacity(this);' onmouseout='restoreMenuOpacity(this);'></td>
+				<td><h1> / </h1></td>
+				<td name='language' currentLanguage='es' onclick='navigateto(this);' es='English Version' en='Versi&oacute;n en Espa&ntilde;ol' onmouseover='changeMenuOpacity(this);' onmouseout='restoreMenuOpacity(this);'></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

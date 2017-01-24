@@ -1,0 +1,129 @@
+
+body
+{
+	background: #cbc8c9 url(../img/sepia.gif) repeat-x 0 50%;
+	background-position: 0 55%;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+	font: normal 12px/120% 'Lato', sans-serif; 
+	color: #542422;
+}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+table td
+{
+	vertical-align: top;
+}
+
+.about
+{
+	display: block;
+	position: absolute;
+	width: 620px;
+	z-index: 5;
+	display: none;
+	margin: 0px 0px 0px 0px;
+	height: 600px;
+}
+
+
+h1, h2, h3 { font: normal 100%/100% 'Pathway Gothic One', sans-serif ; }
+h1
+{
+	font-size: 36px;
+	font-family: 'Pathway Gothic One', sans-serif; 
+	text-transform: uppercase;
+	font-weight: normal;
+}
+h2
+{
+	font-size: 35px; 
+	line-height: 100%; 
+	font-family: 'Pathway Gothic One', sans-serif; 
+	font-weight: normal;
+	text-transform: uppercase;
+	border-bottom: 2px solid #542422;
+	padding-bottom: 2px;
+	margin-bottom: 10px;
+	display: inline-block;
+}
+h3
+{
+	font-size: 20px;
+	line-height: 100%;
+}
+#mainAboutTable
+{
+	width: 550px;
+	margin-top: 10px;
+	margin-left: 20px;
+	border-collapse: collapse;
+}
+#mainAboutTable td
+{
+	border: 1px solid transparent;
+}
+#leftAboutTable
+{
+	text-align: center;
+}
+#rightAboutTable
+{
+}
+#rightAboutTable td
+{
+	border: 1 solid transparent;
+	padding: 10px;
+	cursor: default;
+}
+
+.icon
+{
+	vertical-align: top;
+	width: 22px;
+}
+.iconlarge
+{
+	vertical-align: middle;
+	width: 40px;
+	margin-right: 7px;
+}
+#details td
+{
+	padding: 0px;
+	padding-left: 10px;
+	padding-top: 5px;
+	vertical-align: top;
+	font: normal 14px/140% 'Lato', sans-serif; 
+	cursor: default;
+}
+p
+{
+	font: normal 14px/140% 'Lato', sans-serif; 
+}
+
+.link
+{
+	cursor: hand;
+}
+
+
