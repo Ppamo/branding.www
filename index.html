@@ -4,7 +4,6 @@
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Pathway+Gothic+One' rel='stylesheet' type='text/css'>
 	<script type='text/javascript' src='https://code.jquery.com/jquery-1.7.1.js'></script>
-	<script src="js/jquery.rotate.js"></script>
 	<script language='javascript' >
 		
 		var linksLayer, aboutLayer, dynamicContentLayer;
@@ -15,16 +14,8 @@
 			aboutLayer = createAboutLayer();
 			
 			setLanguage('es');
-			// set some effects
-			$("#downloadcv").rotate({ 
-			   bind: 
-				 { 
-					mouseover : function() { $(this).rotate({animateTo:200,duration:200}) },
-					mouseout : function() { $(this).rotate({animateTo:0,duration:200}) }
-				 }
-			});
 			// set the initial view
-			layerIn(linksLayer);
+			layerIn(aboutLayer);
 		}
 		
 		function layerIn(layer)
